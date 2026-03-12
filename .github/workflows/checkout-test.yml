@@ -1,4 +1,4 @@
-name: Checkout Test
+name: CI Pipeline
 
 on:
   push:
@@ -19,7 +19,6 @@ jobs:
       - name: Verify files
         run: |
           echo "Repository successfully checked out"
-          echo "checkout success"
           ls -R
 
       - name: Setup Java
@@ -36,4 +35,26 @@ jobs:
       - name: Rename Artifact
         run: |
           cp target/*.jar target/backend_fb${{ github.run_number }}.jar
-          ls target
+
+      - name: Code Coverage Report (JaCoCo)
+        run: |
+          mvn org.jacoco:jacoco-maven-plugin:0.8.2:report
+
+      - name: Upload JaCoCo Report
+        uses: actions/upload-artifact@v4
+        with:
+          name: jacoco-report
+          path: target/site/jacoco
+
+      - name: OWASP Dependency Check (SCA)
+        run: |
+          echo "Running Software Composition Analysis..."
+          mvn org.owasp:dependency-check-maven:check
+
+      - name: Upload SCA Report
+        uses: actions/upload-artifact@v4
+        with:
+          name: dependency-check-report
+          path: |
+            target/dependency-check-report.html
+            target/dependency-check-report.json
