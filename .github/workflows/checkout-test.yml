@@ -55,7 +55,8 @@ jobs:
             --format ALL \
             --out /src/dependency-check-report \
             --disableRetiredCheck \
-            --disableExperimental
+            --disableExperimental \
+            --failOnCVSS 0
 
       - name: Upload SCA Report
         uses: actions/upload-artifact@v4
