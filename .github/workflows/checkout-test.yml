@@ -49,8 +49,7 @@ jobs:
       - name: OWASP Dependency Check (SCA)
         run: |
           echo "Running Software Composition Analysis..."
-          mvn org.owasp:dependency-check-maven:check \
-          -Ddependency-check.skipUpdate=true
+          mvn org.owasp:dependency-check-maven:check -Ddependency-check.skipUpdate=true
 
       - name: Upload SCA Report
         uses: actions/upload-artifact@v4
