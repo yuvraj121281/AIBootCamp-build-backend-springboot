@@ -20,4 +20,3 @@ jobs:
         run: |
           echo "Repository successfully checked out"
           ls -R
-          
