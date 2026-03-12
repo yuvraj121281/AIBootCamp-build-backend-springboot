@@ -7,7 +7,7 @@ on:
   workflow_dispatch:
 
 jobs:
-  checkout:
+  checkout-build:
     runs-on: ubuntu-latest
 
     steps:
@@ -21,3 +21,19 @@ jobs:
           echo "Repository successfully checked out"
           echo "checkout success"
           ls -R
+
+      - name: Setup Java
+        uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '17'
+
+      - name: Build Spring Boot Jar
+        run: |
+          echo "Building Spring Boot Jar..."
+          mvn clean package -Dmaven.test.skip=true
+
+      - name: Rename Artifact
+        run: |
+          cp target/*.jar target/backend_fb${{ github.run_number }}.jar
+          ls target
