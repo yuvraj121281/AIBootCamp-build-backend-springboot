@@ -14,9 +14,10 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v4
         with:
-          ref: newfeature
+          ref: dev
 
       - name: Verify files
         run: |
           echo "Repository successfully checked out"
+          echo "checkout success"
           ls -R
