@@ -26,8 +26,6 @@ jobs:
         with:
           distribution: temurin
           java-version: '17'
-        run: |
-          echo "Java is set"
 
       - name: Build Spring Boot Jar
         run: |
