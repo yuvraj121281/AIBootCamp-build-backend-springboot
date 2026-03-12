@@ -1,0 +1,23 @@
+name: Checkout Test
+
+on:
+  push:
+    branches:
+      - feature/CI
+      - dev
+  workflow_dispatch:
+
+jobs:
+  checkout:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          ref: newfeature
+
+      - name: Verify files
+        run: |
+          echo "Repository successfully checked out"
+          ls -R
