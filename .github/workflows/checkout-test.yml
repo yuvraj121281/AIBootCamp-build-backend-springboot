@@ -3,7 +3,6 @@ name: Checkout Test
 on:
   push:
     branches:
-      - feature/CI
       - dev
   workflow_dispatch:
 
