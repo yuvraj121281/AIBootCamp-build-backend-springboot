@@ -65,11 +65,6 @@ jobs:
         env:
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
         run: |
-          # mvn sonar:sonar \
-          #   -Dsonar.projectKey=yuvraj121281_AIBootCamp-build-backend-springboot \
-          #   -Dsonar.organization=yuvraj121281 \
-          #   -Dsonar.host.url=https://sonarcloud.io \
-          #   -Dsonar.login=$SONAR_TOKEN
           mvn clean package -Dmaven.test.skip=true
           mvn sonar:sonar \
             -Dsonar.projectKey=yuvraj121281_AIBootCamp-build-backend-springboot \
@@ -77,9 +72,6 @@ jobs:
             -Dsonar.host.url=https://sonarcloud.io \
             -Dsonar.login=$SONAR_TOKEN
 
-      # -----------------------------
-      # SonarCloud Quality Gate Check
-      # -----------------------------
       - name: SonarCloud Quality Gate
         uses: sonarsource/sonarqube-quality-gate-action@v1
         timeout-minutes: 5

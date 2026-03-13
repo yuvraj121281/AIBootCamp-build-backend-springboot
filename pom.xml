@@ -131,25 +131,6 @@
             </plugin>
 
             <plugin>
-		       <groupId>org.jacoco</groupId>
-		       <artifactId>jacoco-maven-plugin</artifactId>
-		       <version>0.8.2</version>
-		          <executions>
-			          <execution>
-				         <goals>
-					        <goal>prepare-agent</goal>
-				         </goals>
-			          </execution>
-			          <execution>
-				        <id>report</id>
-				         <goals>
-					        <goal>report</goal>
-				         </goals>
-			          </execution>
-		          </executions>
-	        </plugin>
-
-            <plugin>
               <groupId>org.owasp</groupId>
               <artifactId>dependency-check-maven</artifactId>
               <version>7.1.1</version>
