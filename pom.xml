@@ -25,7 +25,7 @@
         <sonar.dependencyCheck.jsonReportPath>target/dependency-check-report.json</sonar.dependencyCheck.jsonReportPath>
         <sonar.dependencyCheck.htmlReportPath>target/dependency-check-report.html</sonar.dependencyCheck.htmlReportPath>
 
-
+        <sonar.organization>yuvraj121281</sonar.organization>
     </properties>
 
     <dependencies>
@@ -167,6 +167,12 @@
                  </formats>
              </configuration>
              </plugin>
+
+            <plugin>
+              <groupId>org.sonarsource.scanner.maven</groupId>
+              <artifactId>sonar-maven-plugin</artifactId>
+              <version>4.0.0.4121</version>
+            </plugin> 
 
         </plugins>
     </build>
