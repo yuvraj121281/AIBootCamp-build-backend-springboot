@@ -62,10 +62,10 @@ jobs:
       # SonarCloud SAST Scan
       # -----------------------------
       - name: SonarCloud SAST Scan
+        if: github.ref == 'refs/heads/main'
         env:
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
         run: |
-          mvn clean package -Dmaven.test.skip=true
           mvn sonar:sonar \
             -Dsonar.projectKey=yuvraj121281_AIBootCamp-build-backend-springboot \
             -Dsonar.organization=yuvraj121281 \
@@ -73,6 +73,7 @@ jobs:
             -Dsonar.login=$SONAR_TOKEN
 
       - name: SonarCloud Quality Gate
+        if: github.ref == 'refs/heads/main'
         uses: sonarsource/sonarqube-quality-gate-action@v1
         timeout-minutes: 5
         env:
