@@ -61,23 +61,16 @@ jobs:
       # -----------------------------
       # SonarCloud SAST Scan
       # -----------------------------
-      # - name: SonarCloud SAST Scan
-      #   env:
-      #     SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
-      #   run: |
-      #     mvn sonar:sonar \
-      #       -Dsonar.projectKey=yuvraj121281_AIBootCamp-build-backend-springboot \
-      #       -Dsonar.organization=yuvraj121281 \
-      #       -Dsonar.host.url=https://sonarcloud.io \
-      #       -Dsonar.login=$SONAR_TOKEN
-
       - name: SonarCloud SAST Scan
         env:
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
         run: |
-        # Generate classes + JaCoCo report first
+          # mvn sonar:sonar \
+          #   -Dsonar.projectKey=yuvraj121281_AIBootCamp-build-backend-springboot \
+          #   -Dsonar.organization=yuvraj121281 \
+          #   -Dsonar.host.url=https://sonarcloud.io \
+          #   -Dsonar.login=$SONAR_TOKEN
           mvn clean package -Dmaven.test.skip=true
-        # Run Sonar scan (must be in project root)
           mvn sonar:sonar \
             -Dsonar.projectKey=yuvraj121281_AIBootCamp-build-backend-springboot \
             -Dsonar.organization=yuvraj121281 \
