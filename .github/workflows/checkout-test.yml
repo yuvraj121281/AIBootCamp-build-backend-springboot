@@ -11,6 +11,9 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
+      # -----------------------------
+      # Checkout Code
+      # -----------------------------
       - name: Checkout repository
         uses: actions/checkout@v4
         with:
@@ -21,12 +24,18 @@ jobs:
           echo "Repository successfully checked out"
           ls -R
 
+      # -----------------------------
+      # Setup Java
+      # -----------------------------
       - name: Setup Java
         uses: actions/setup-java@v4
         with:
           distribution: temurin
           java-version: '17'
 
+      # -----------------------------
+      # Build Spring Boot Jar
+      # -----------------------------
       - name: Build Spring Boot Jar
         run: |
           echo "Building Spring Boot Jar..."
@@ -36,6 +45,9 @@ jobs:
         run: |
           cp target/*.jar target/backend_fb${{ github.run_number }}.jar
 
+      # -----------------------------
+      # Code Coverage Report (JaCoCo)
+      # -----------------------------
       - name: Code Coverage Report (JaCoCo)
         run: |
           mvn org.jacoco:jacoco-maven-plugin:0.8.2:report
@@ -53,21 +65,24 @@ jobs:
         env:
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
         run: |
-          mvn sonar:sonar \
-            -Dsonar.projectKey=YOUR_PROJECT_KEY \
-            -Dsonar.organization=YOUR_ORG \
+          mvn -B verify org.sonarsource.scanner.maven:sonar-maven-plugin:sonar \
+            -Dsonar.projectKey=yuvraj121281_AIBootCamp-build-backend-springboot \
+            -Dsonar.organization=yuvraj121281 \
             -Dsonar.host.url=https://sonarcloud.io \
             -Dsonar.login=$SONAR_TOKEN
 
       # -----------------------------
-      # SonarCloud Quality Gate
+      # SonarCloud Quality Gate Check
       # -----------------------------
-      - name: SonarCloud Quality Gate Check
+      - name: SonarCloud Quality Gate
         uses: sonarsource/sonarqube-quality-gate-action@v1
         timeout-minutes: 5
         env:
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
 
+      # -----------------------------
+      # OWASP Dependency Check (SCA)
+      # -----------------------------
       - name: OWASP Dependency Check (SCA)
         continue-on-error: true
         run: |
