@@ -11,7 +11,7 @@ on:
       - main
 
 jobs:
-  build:
+  build-and-scan:
     runs-on: ubuntu-latest
 
     steps:
@@ -79,16 +79,13 @@ jobs:
           path: ./dependency-check-report
 
       # -----------------------------
-      # SonarCloud SAST Scan + Quality Gate (Main only)
+      # SonarCloud SAST Scan (main branch only)
       # -----------------------------
-      - name: SonarCloud SAST Scan + Quality Gate
+      - name: SonarCloud SAST Scan
         if: github.ref == 'refs/heads/main'
         env:
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
         run: |
-          echo "Running SonarCloud Scan and Quality Gate"
-
-          # Run Sonar scan
           mvn sonar:sonar \
             -Dsonar.projectKey=yuvraj121281_AIBootCamp-build-backend-springboot \
             -Dsonar.organization=yuvraj121281 \
@@ -97,5 +94,12 @@ jobs:
             -Dsonar.coverage.jacoco.xmlReportPaths=target/site/jacoco/jacoco.xml \
             -Dsonar.dependencyCheck.jsonReportPath=./dependency-check-report/dependency-check-report.json
 
-          # Run Quality Gate immediately after in the same job
-          npx @sonarsource/sonarqube-quality-gate-action --sonar-token $SONAR_TOKEN
+      # -----------------------------
+      # SonarCloud Quality Gate (main branch only)
+      # -----------------------------
+      - name: SonarCloud Quality Gate
+        if: github.ref == 'refs/heads/main'
+        uses: sonarsource/sonarqube-quality-gate-action@v1
+        timeout-minutes: 5
+        env:
+          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
