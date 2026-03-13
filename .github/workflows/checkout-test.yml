@@ -7,7 +7,6 @@ on:
       - main
   pull_request:
     branches:
-      - dev
       - main
 
 jobs:
@@ -60,15 +59,20 @@ jobs:
       # SonarCloud SAST Scan
       # -----------------------------
       - name: SonarCloud SAST Scan
-        if: github.ref == 'refs/heads/main'
+        if: github.ref == 'refs/heads/main' || github.event_name == 'pull_request'
         env:
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
         run: |
-          mvn sonar:sonar \
-            -Dsonar.projectKey=yuvraj121281_AIBootCamp-build-backend-springboot \
-            -Dsonar.organization=yuvraj121281 \
-            -Dsonar.host.url=https://sonarcloud.io \
-            -Dsonar.login=$SONAR_TOKEN
+          # Only push results for main branch
+          if [ "${GITHUB_REF}" == "refs/heads/main" ]; then
+            mvn sonar:sonar \
+              -Dsonar.projectKey=yuvraj121281_AIBootCamp-build-backend-springboot \
+              -Dsonar.organization=yuvraj121281 \
+              -Dsonar.host.url=https://sonarcloud.io \
+              -Dsonar.login=$SONAR_TOKEN
+          else
+            echo "Skipping SonarCloud scan for feature/dev PR"
+          fi
 
       # -----------------------------
       # SonarCloud Quality Gate
