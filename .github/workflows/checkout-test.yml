@@ -4,7 +4,11 @@ on:
   push:
     branches:
       - dev
-  workflow_dispatch:
+      - main
+  pull_request:
+    branches:
+      - dev
+      - main
 
 jobs:
   checkout-build:
@@ -16,8 +20,6 @@ jobs:
       # -----------------------------
       - name: Checkout repository
         uses: actions/checkout@v4
-        with:
-          ref: dev
 
       - name: Verify files
         run: |
@@ -37,20 +39,16 @@ jobs:
       # Build Spring Boot Jar
       # -----------------------------
       - name: Build Spring Boot Jar
-        run: |
-          echo "Building Spring Boot Jar..."
-          mvn clean package -Dmaven.test.skip=true
+        run: mvn clean package -Dmaven.test.skip=true
 
       - name: Rename Artifact
-        run: |
-          cp target/*.jar target/backend_fb${{ github.run_number }}.jar
+        run: cp target/*.jar target/backend_fb${{ github.run_number }}.jar
 
       # -----------------------------
       # Code Coverage Report (JaCoCo)
       # -----------------------------
       - name: Code Coverage Report (JaCoCo)
-        run: |
-          mvn org.jacoco:jacoco-maven-plugin:0.8.2:report
+        run: mvn org.jacoco:jacoco-maven-plugin:0.8.2:report
 
       - name: Upload JaCoCo Report
         uses: actions/upload-artifact@v4
@@ -72,6 +70,9 @@ jobs:
             -Dsonar.host.url=https://sonarcloud.io \
             -Dsonar.login=$SONAR_TOKEN
 
+      # -----------------------------
+      # SonarCloud Quality Gate
+      # -----------------------------
       - name: SonarCloud Quality Gate
         if: github.ref == 'refs/heads/main'
         uses: sonarsource/sonarqube-quality-gate-action@v1
